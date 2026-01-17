@@ -1,0 +1,25 @@
+{
+  "timestamp": "2026-01-17T20:08:42.025904",
+  "pricing": {
+    "gpt-4o": {
+      "input_cost": 0.0025,
+      "output_cost": 0.01
+    },
+    "gpt-4o-mini": {
+      "input_cost": 0.00015,
+      "output_cost": 0.0006
+    },
+    "claude-sonnet-4": {
+      "input_cost": 0.003,
+      "output_cost": 0.015
+    },
+    "claude-haiku": {
+      "input_cost": 0.00025,
+      "output_cost": 0.00125
+    },
+    "claude-sonnet-4-5": {
+      "input_cost": 0.003,
+      "output_cost": 0.015
+    }
+  }
+}

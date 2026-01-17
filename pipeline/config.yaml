@@ -1,0 +1,75 @@
+# Pipeline Configuration
+# This file controls the weekly LLM evaluation pipeline
+
+models:
+  - name: gemini
+    provider: google
+    version: auto  # Auto-detect latest version
+    portkey_id: "@google/gemini-2.0-flash-exp"
+  
+  - name: gpt
+    provider: openai
+    version: auto
+    portkey_id: "@openai/gpt-4o"
+  
+  - name: claude
+    provider: anthropic
+    version: auto
+    portkey_id: "@anthropic/claude-sonnet-4-5"
+
+evaluation:
+  questions_per_category: 80  # 80 questions × 5 categories = 400 total
+  categories:
+    - knowledge
+    - math
+    - code
+    - business
+    - analysis
+  
+  # Question sources
+  question_files:
+    knowledge: "data/questions/knowledge.json"
+    math: "data/questions/math.json"
+    code: "data/questions/code.json"
+    business: "data/questions/business.json"
+    analysis: "data/questions/analysis.json"
+
+judges:
+  # Models used to judge responses
+  - model: "@openai/gpt-4o"
+    weight: 1.0
+  - model: "@anthropic/claude-sonnet-4"
+    weight: 1.0
+  - model: "@google/gemini-2.0-flash-exp"
+    weight: 1.0
+
+schedule:
+  frequency: weekly
+  day: sunday  # Day of week
+  hour: 2      # 2 AM
+  minute: 0
+
+output:
+  log_dir: "logs/weekly"
+  archive_dir: "archive/evaluations"
+  results_file: "data/real_evaluation_results.json"
+
+notifications:
+  email:
+    enabled: false  # Set to true and configure SMTP
+    recipients:
+      - "admin@example.com"
+  
+  slack:
+    enabled: false  # Set to true and add webhook
+    webhook_url: ""
+
+archival:
+  keep_last_n: 12  # Keep last 12 weeks (3 months)
+  compress: true
+
+# Feature flags
+features:
+  auto_update_models: true   # Automatically switch to best models
+  version_checking: true     # Check for latest model versions
+  dry_run: false            # Set true for testing without API calls

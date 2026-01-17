@@ -1,0 +1,105 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+*.manifest
+*.spec
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment Variables
+.env
+.env.local
+.env.*.local
+
+# Logs and Cache
+*.log
+logs/weekly/*/
+logs/*.log
+*.cache
+.pytest_cache/
+
+# Evaluation Results (keep structure, ignore content)
+logs/weekly/*/
+archive/evaluations/*.zip
+
+# Data files (keep examples, ignore actual runs)
+data/test_*.log
+data/current_metrics_snapshot.json
+
+# Frontend Build
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/build/
+frontend/dist/
+frontend/.turbo/
+
+# OS
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+*.ipynb
+
+# Coverage
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Temporary files
+*.tmp
+*.temp
+tmp/
+temp/
+
+# API Keys and Secrets (IMPORTANT!)
+secrets/
+*.key
+*.pem
+credentials.json
+
+# Keep these directories but ignore their contents
+logs/weekly/.gitkeep
+archive/evaluations/.gitkeep

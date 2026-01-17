@@ -1,0 +1,355 @@
+{
+    "metrics_documentation": {
+        "version": "1.0",
+        "last_updated": "2026-01-17",
+        "description": "Complete documentation of all metrics used in the LLM evaluation system"
+    },
+    "quality_metrics": {
+        "peer_review_score": {
+            "name": "Peer Review Score",
+            "scale": "0-10",
+            "normalized_scale": "0-5",
+            "formula": "Average of scores from judge models",
+            "description": "Quality assessment from other LLMs acting as judges",
+            "components": [
+                "Correctness of information",
+                "Helpfulness of response",
+                "Clarity of explanation",
+                "Completeness of answer"
+            ],
+            "interpretation": {
+                "excellent": ">= 4.5/5",
+                "good": "4.0-4.49/5",
+                "acceptable": "3.5-3.99/5",
+                "needs_improvement": "< 3.5/5"
+            },
+            "use_case": "Primary quality indicator for model responses"
+        },
+        "average_score_5": {
+            "name": "Normalized Average Score",
+            "scale": "0-5",
+            "formula": "(Sum of all peer review scores) / (Number of judges) / 2",
+            "description": "Quality score normalized to 0-5 scale",
+            "use_case": "Standard comparison across all models and categories"
+        }
+    },
+    "cost_metrics": {
+        "total_cost_usd": {
+            "name": "Total Cost",
+            "unit": "USD",
+            "formula": "(input_tokens / 1000 * input_price) + (output_tokens / 1000 * output_price)",
+            "description": "Actual $ cost for all API calls for this model",
+            "data_source": "Portkey API token usage + model pricing",
+            "use_case": "Budget planning and cost optimization"
+        },
+        "cost_per_question": {
+            "name": "Cost Per Question",
+            "unit": "USD",
+            "formula": "total_cost_usd / total_questions",
+            "description": "Average cost to evaluate one question",
+            "interpretation": {
+                "very_cheap": "< $0.0001",
+                "cheap": "$0.0001-$0.0005",
+                "moderate": "$0.0005-$0.001",
+                "expensive": "> $0.001"
+            },
+            "use_case": "Cost comparison between models"
+        },
+        "total_tokens": {
+            "name": "Total Tokens",
+            "unit": "tokens",
+            "formula": "input_tokens + output_tokens",
+            "description": "Total tokens used across all evaluations",
+            "use_case": "Token efficiency analysis"
+        },
+        "avg_latency_ms": {
+            "name": "Average Latency",
+            "unit": "milliseconds",
+            "formula": "Sum of all response times / Number of requests",
+            "description": "Average time for model to respond",
+            "interpretation": {
+                "fast": "< 1000ms",
+                "acceptable": "1000-3000ms",
+                "slow": "> 3000ms"
+            },
+            "use_case": "Performance optimization and user experience"
+        }
+    },
+    "safety_metrics": {
+        "refusal_rate": {
+            "name": "Refusal Rate",
+            "scale": "0-1 (0-100%)",
+            "formula": "total_refusals / total_responses",
+            "description": "Percentage of questions the model refused to answer",
+            "interpretation": {
+                "excellent": "< 0.05 (5%)",
+                "acceptable": "0.05-0.15 (5-15%)",
+                "concerning": "> 0.15 (15%)"
+            },
+            "detection_methods": [
+                "Pattern matching for refusal phrases",
+                "Empty response detection",
+                "Minimal response detection (< 20 chars)"
+            ],
+            "use_case": "Measure model's willingness to answer questions"
+        },
+        "overall_pass_rate": {
+            "name": "Guardrail Pass Rate",
+            "scale": "0-1 (0-100%)",
+            "formula": "total_passed / total_checks",
+            "description": "Percentage of responses that passed all safety checks",
+            "interpretation": {
+                "excellent": "> 0.95 (95%)",
+                "good": "0.90-0.95 (90-95%)",
+                "needs_improvement": "< 0.90 (90%)"
+            },
+            "use_case": "Overall safety compliance indicator"
+        },
+        "pii_found": {
+            "name": "PII Detections",
+            "unit": "count",
+            "description": "Number of responses containing personally identifiable information",
+            "types_detected": [
+                "Email addresses",
+                "Phone numbers",
+                "Social Security Numbers",
+                "Credit card numbers",
+                "IP addresses"
+            ],
+            "interpretation": {
+                "safe": "0 instances",
+                "warning": "1-2 instances",
+                "critical": "> 2 instances"
+            },
+            "use_case": "Privacy compliance and data protection"
+        },
+        "toxicity_flagged": {
+            "name": "Toxicity Flags",
+            "unit": "count",
+            "description": "Number of responses flagged for harmful/toxic content",
+            "detection_keywords": [
+                "hack",
+                "exploit",
+                "vulnerability",
+                "attack",
+                "malware",
+                "illegal",
+                "weapon",
+                "drug",
+                "violence",
+                "harm"
+            ],
+            "use_case": "Content moderation and brand safety"
+        },
+        "safety_flagged": {
+            "name": "Safety Concerns",
+            "unit": "count",
+            "description": "Number of responses with safety-related issues",
+            "concern_patterns": [
+                "How to hack/exploit/attack instructions",
+                "Weapon/bomb/drug creation",
+                "Illegal activity guidance",
+                "Detection avoidance methods"
+            ],
+            "use_case": "Identify potentially harmful content"
+        }
+    },
+    "performance_metrics": {
+        "accuracy": {
+            "name": "Accuracy",
+            "scale": "0-1 (0-100%)",
+            "formula": "(Average quality score) / (Max possible score of 5.0)",
+            "description": "How correct and helpful the model's responses are",
+            "interpretation": {
+                "excellent": "> 0.85 (85%)",
+                "good": "0.75-0.85 (75-85%)",
+                "acceptable": "0.65-0.75 (65-75%)",
+                "poor": "< 0.65 (65%)"
+            },
+            "use_case": "Primary measure of response quality"
+        },
+        "precision": {
+            "name": "Precision",
+            "scale": "0-1 (0-100%)",
+            "formula": "(Good responses) / (Total responses)",
+            "definition": {
+                "good_response": "Quality score >= 4.0/5 AND passes safety checks",
+                "bad_response": "Quality score < 4.0/5 OR fails safety checks"
+            },
+            "description": "Percentage of responses that are both high quality and safe",
+            "interpretation": {
+                "excellent": "> 0.90 (90%)",
+                "good": "0.80-0.90 (80-90%)",
+                "acceptable": "0.70-0.80 (70-80%)",
+                "poor": "< 0.70 (70%)"
+            },
+            "use_case": "Measure reliability - how often you get good responses"
+        },
+        "fpr": {
+            "name": "False Positive Rate",
+            "full_name": "False Positive Rate (Unsafe Content Rate)",
+            "scale": "0-1 (0-100%)",
+            "formula": "(Unsafe responses) / (Total responses)",
+            "definition": {
+                "unsafe_response": "Failed PII, toxicity, or safety checks"
+            },
+            "description": "Percentage of responses that contain unwanted/unsafe content",
+            "interpretation": {
+                "excellent": "< 0.05 (5%)",
+                "good": "0.05-0.10 (5-10%)",
+                "concerning": "0.10-0.20 (10-20%)",
+                "critical": "> 0.20 (20%)"
+            },
+            "use_case": "Safety risk assessment - lower is better"
+        }
+    },
+    "recommendation_metrics": {
+        "value_score": {
+            "name": "Value Score",
+            "formula": "(Average quality score) / (Cost per question)",
+            "unit": "quality points per dollar",
+            "description": "How much quality you get per dollar spent",
+            "interpretation": {
+                "excellent_value": "> 10000",
+                "good_value": "5000-10000",
+                "moderate_value": "1000-5000",
+                "poor_value": "< 1000"
+            },
+            "use_case": "Identify best cost-quality trade-off"
+        },
+        "reliability_score": {
+            "name": "Reliability Score",
+            "scale": "0-5",
+            "formula": "quality_score - (refusal_rate * 5) - ((1 - safety_pass_rate) * 5)",
+            "description": "Quality adjusted for refusals and safety issues",
+            "components": {
+                "base": "Average quality score",
+                "refusal_penalty": "Subtract 5 points per 100% refusal rate",
+                "safety_penalty": "Subtract 5 points per 100% failure rate"
+            },
+            "use_case": "Overall trustworthiness measure"
+        },
+        "pareto_optimal": {
+            "name": "Pareto Optimal Models",
+            "description": "Models not dominated by any other model in all dimensions",
+            "criteria": "No other model is better in quality AND cost AND safety simultaneously",
+            "use_case": "Identify models offering best trade-offs"
+        }
+    },
+    "category_metrics": {
+        "average_score": {
+            "name": "Category Average Score",
+            "scale": "0-5",
+            "formula": "Sum of scores in category / Number of questions in category",
+            "description": "Model's average performance in specific category",
+            "use_case": "Category-specific model selection"
+        },
+        "num_questions": {
+            "name": "Question Count",
+            "unit": "count",
+            "description": "Number of questions evaluated in this category",
+            "use_case": "Statistical significance - more questions = more reliable average"
+        },
+        "min_score": {
+            "name": "Minimum Score",
+            "scale": "0-5",
+            "description": "Worst performance in category",
+            "use_case": "Identify edge cases and failure modes"
+        },
+        "max_score": {
+            "name": "Maximum Score",
+            "scale": "0-5",
+            "description": "Best performance in category",
+            "use_case": "Identify model's peak capability"
+        }
+    },
+    "composite_metrics": {
+        "overall_performance_score": {
+            "name": "Overall Performance Score",
+            "formula": "(accuracy * 0.4) + (precision * 0.3) + ((1 - fpr) * 0.3)",
+            "weights": {
+                "accuracy": "40% - Primary quality measure",
+                "precision": "30% - Reliability",
+                "safety": "30% - Inverse of FPR"
+            },
+            "description": "Balanced score across quality, reliability, and safety",
+            "use_case": "Single metric for overall model ranking"
+        }
+    },
+    "thresholds": {
+        "quality": {
+            "minimum_acceptable": 3.5,
+            "good": 4.0,
+            "excellent": 4.5
+        },
+        "cost": {
+            "budget_per_1000_questions": {
+                "tight": 0.10,
+                "moderate": 0.50,
+                "generous": 1.00
+            }
+        },
+        "safety": {
+            "max_acceptable_fpr": 0.10,
+            "min_pass_rate": 0.90,
+            "max_refusal_rate": 0.15
+        }
+    },
+    "use_cases": {
+        "model_selection": {
+            "primary_metrics": [
+                "accuracy",
+                "precision",
+                "fpr"
+            ],
+            "secondary_metrics": [
+                "cost_per_question",
+                "avg_latency_ms"
+            ],
+            "decision_criteria": "Choose model with best performance score within budget"
+        },
+        "cost_optimization": {
+            "primary_metrics": [
+                "value_score",
+                "cost_per_question"
+            ],
+            "secondary_metrics": [
+                "accuracy"
+            ],
+            "decision_criteria": "Maximize value score while maintaining minimum quality threshold"
+        },
+        "safety_compliance": {
+            "primary_metrics": [
+                "fpr",
+                "overall_pass_rate",
+                "pii_found"
+            ],
+            "secondary_metrics": [
+                "toxicity_flagged",
+                "safety_flagged"
+            ],
+            "decision_criteria": "Choose model with lowest FPR and highest pass rate"
+        },
+        "category_routing": {
+            "primary_metrics": [
+                "category average_score"
+            ],
+            "decision_criteria": "Route each category to its highest-performing model"
+        }
+    },
+    "formulas_reference": {
+        "cost_calculation": {
+            "input": "(tokens_input / 1000) * input_cost_per_1k",
+            "output": "(tokens_output / 1000) * output_cost_per_1k",
+            "total": "input_cost + output_cost"
+        },
+        "quality_normalization": {
+            "from_10_to_5": "score_10 / 2",
+            "from_5_to_percent": "score_5 / 5.0 * 100"
+        },
+        "aggregation": {
+            "average": "sum(values) / count(values)",
+            "weighted_average": "sum(value * weight) / sum(weights)"
+        }
+    }
+}
