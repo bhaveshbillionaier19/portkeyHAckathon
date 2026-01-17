@@ -334,46 +334,4 @@ Contributions are welcome! Please:
 4. Push to branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 🙏 Acknowledgments
-
-- **Portkey AI** - For the amazing unified API gateway
-- **FastAPI** - For the blazing-fast Python framework
-- **OpenAI, Google, Anthropic** - For their incredible language models
-
-## 📞 Contact
-
-**Developer**: Bhavesh  
-**Project**: LLM Evaluation & Smart Routing System  
-**Hackathon**: Portkey AI Hackathon 2026
-
----
-
-## ⚡ Quick Commands Reference
-
-```bash
-# Setup
-git clone <repo-url>
-cd portkeyHAckathon
-python -m venv venv
-source venv/bin/activate  # or venv\Scripts\activate on Windows
-pip install -r requirements.txt
-
-# Run
-python run_backend.py          # Backend on :8001
-python -m http.server 8080     # Frontend on :8080 (in web/ dir)
-python pipeline/master.py      # Run evaluation pipeline
-
-# Development
-pip install -r requirements.txt  # Install dependencies
-python -m pytest                 # Run tests
-```
-
----
-
-**⭐ Star this repo if you find it useful!**
-
-**🎉 Built with ❤️ for the Portkey AI Hackathon**
